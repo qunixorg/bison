@@ -1,6 +1,6 @@
 ## Makefile for Bison testsuite.
 
-## Copyright (C) 2000-2015, 2018-2019 Free Software Foundation, Inc.
+## Copyright (C) 2000-2015, 2018-2020 Free Software Foundation, Inc.
 ##
 ## This program is free software: you can redistribute it and/or modify
 ## it under the terms of the GNU General Public License as published by
@@ -36,6 +36,14 @@ $(top_srcdir)/%D%/package.m4: $(top_srcdir)/configure
 	} >$@.tmp
 	$(AM_V_at)mv $@.tmp $@
 
+
+# Update the test cases.  Consider the latest test results to be the
+# correct expectations, and change the test cases to match them.
+.PHONY: update-tests
+update-tests:
+	$(AM_V_GEN)cd $(top_srcdir) \
+	  && build-aux/update-test $(abs_builddir)/%D%/testsuite.dir/*/testsuite.log
+
 ## ------------------------- ##
 ## Generate the test suite.  ##
 ## ------------------------- ##
@@ -47,6 +55,7 @@ TESTSUITE_AT =                                \
   %D%/c++.at                                  \
   %D%/calc.at                                 \
   %D%/conflicts.at                            \
+  %D%/counterexample.at                       \
   %D%/cxx-type.at                             \
   %D%/diagnostics.at                          \
   %D%/existing.at                             \
@@ -56,6 +65,7 @@ TESTSUITE_AT =                                \
   %D%/java.at                                 \
   %D%/javapush.at                             \
   %D%/local.at                                \
+  %D%/m4.at                                   \
   %D%/named-refs.at                           \
   %D%/output.at                               \
   %D%/package.m4                              \
@@ -96,10 +106,10 @@ clean-local-tests:
 
 .PHONY: recheck
 recheck: $(RUN_TESTSUITE_deps)
-	$(RUN_TESTSUITE)							\
-	  $$(perl -n								\
-	     -e 'if (/Summary of the failures/../Detailed failed tests/)'	\
-	     -e '{ /^ *[0-9]+:/ && s/:.*//s && print }' %D%/testsuite.log)
+	$(RUN_TESTSUITE)					\
+	  $$(perl -n						\
+	     -e 'eof && /^(\d+).*: FAILED/ && print "$$1 "'	\
+		%D%/testsuite.dir/*/testsuite.log)
 
 check-local: $(RUN_TESTSUITE_deps)
 	$(RUN_TESTSUITE)

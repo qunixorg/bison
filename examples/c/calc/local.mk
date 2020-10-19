@@ -1,4 +1,4 @@
-## Copyright (C) 2019 Free Software Foundation, Inc.
+## Copyright (C) 2019-2020 Free Software Foundation, Inc.
 ##
 ## This program is free software: you can redistribute it and/or modify
 ## it under the terms of the GNU General Public License as published by
@@ -27,6 +27,7 @@ nodist_%C%_calc_SOURCES = %D%/calc.y
 
 # Don't use gnulib's system headers.
 %C%_calc_CPPFLAGS = -I$(top_srcdir)/%D% -I$(top_builddir)/%D%
+%C%_calc_CFLAGS = $(TEST_CFLAGS)
 
 dist_calc_DATA = %D%/calc.y %D%/Makefile %D%/README.md
 CLEANFILES += %D%/calc.[ch] %D%/calc.output %D%/scan.c

@@ -1,6 +1,6 @@
 # Exercising Bison Grammar Reduction.                      -*- Autotest -*-
 
-# Copyright (C) 2001-2002, 2007-2015, 2018-2019 Free Software
+# Copyright (C) 2001-2002, 2007-2015, 2018-2020 Free Software
 # Foundation, Inc.
 
 # This program is free software: you can redistribute it and/or modify
@@ -1300,6 +1300,7 @@ dnl INPUT
 dnl BISON-STDERR
 [AT_COND_CASE([[LALR]],
 [[input.y: warning: 1 reduce/reduce conflict [-Wconflicts-rr]
+input.y: note: rerun with option '-Wcounterexamples' to generate conflict counterexamples
 ]], [])],
 
 dnl TABLES

@@ -1,3 +1,22 @@
+/* Parser and scanner for calc in D.   -*- D -*-
+
+   Copyright (C) 2018-2020 Free Software Foundation, Inc.
+
+   This file is part of Bison, the GNU Compiler Compiler.
+
+   This program is free software: you can redistribute it and/or modify
+   it under the terms of the GNU General Public License as published by
+   the Free Software Foundation, either version 3 of the License, or
+   (at your option) any later version.
+
+   This program is distributed in the hope that it will be useful,
+   but WITHOUT ANY WARRANTY; without even the implied warranty of
+   MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+   GNU General Public License for more details.
+
+   You should have received a copy of the GNU General Public License
+   along with this program.  If not, see <http://www.gnu.org/licenses/>.  */
+
 %language "D"
 
 %define api.parser.class {Calc}
@@ -99,16 +118,15 @@ class CalcLexer(R) : Lexer
     while (!input.empty && input.front != '\n' && isWhite (input.front))
       input.popFront;
 
-    // Handle EOF.
     if (input.empty)
-      return YYTokenType.EOF;
+      return TokenKind.YYEOF;
 
     // Numbers.
     if (input.front.isNumber)
       {
         import std.conv : parse;
         semanticVal_.ival = input.parse!int;
-        return YYTokenType.NUM;
+        return TokenKind.NUM;
       }
 
     // Individual characters
@@ -116,16 +134,15 @@ class CalcLexer(R) : Lexer
     input.popFront;
     switch (ch)
       {
-      case EOF: return YYTokenType.EOF;
-      case '=': return YYTokenType.EQ;
-      case '+': return YYTokenType.PLUS;
-      case '-': return YYTokenType.MINUS;
-      case '*': return YYTokenType.STAR;
-      case '/': return YYTokenType.SLASH;
-      case '(': return YYTokenType.LPAR;
-      case ')': return YYTokenType.RPAR;
-      case '\n': return YYTokenType.EOL;
-      default:  assert(0);
+      case '=':  return TokenKind.EQ;
+      case '+':  return TokenKind.PLUS;
+      case '-':  return TokenKind.MINUS;
+      case '*':  return TokenKind.STAR;
+      case '/':  return TokenKind.SLASH;
+      case '(':  return TokenKind.LPAR;
+      case ')':  return TokenKind.RPAR;
+      case '\n': return TokenKind.EOL;
+      default: assert(0);
       }
   }
 }

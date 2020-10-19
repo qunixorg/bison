@@ -1,4 +1,23 @@
-/* Prologue (directives).   -*- C++ -*- */
+/* Scanner for reccalc.   -*- C -*-
+
+   Copyright (C) 2019-2020 Free Software Foundation, Inc.
+
+   This file is part of Bison, the GNU Compiler Compiler.
+
+   This program is free software: you can redistribute it and/or modify
+   it under the terms of the GNU General Public License as published by
+   the Free Software Foundation, either version 3 of the License, or
+   (at your option) any later version.
+
+   This program is distributed in the hope that it will be useful,
+   but WITHOUT ANY WARRANTY; without even the implied warranty of
+   MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+   GNU General Public License for more details.
+
+   You should have received a copy of the GNU General Public License
+   along with this program.  If not, see <http://www.gnu.org/licenses/>.  */
+
+/* Prologue (directives).   -*- C -*- */
 
 /* Disable Flex features we don't need, to avoid warnings. */
 %option nodefault noinput nounput noyywrap
@@ -17,10 +36,14 @@
 
 %%
 %{
+  // Number of opened parentheses.
   int nesting = 0;
+  // A buffer storing the text inside the outer parentheses.
   char *str = NULL;
-  int size = 0;
+  // Its allocated size.
   int capacity = 0;
+  // Its used size.
+  int size = 0;
 #define STR_APPEND()                                    \
   do {                                                  \
     if (capacity < size + yyleng + 1)                   \
@@ -28,9 +51,9 @@
         do                                              \
           capacity = capacity ? 2 * capacity : 128;     \
         while (capacity < size + yyleng + 1);           \
-        str = realloc (str, capacity);                  \
+        str = realloc (str, (size_t) capacity);         \
       }                                                 \
-    memcpy (str + size, yytext, yyleng);                \
+    memcpy (str + size, yytext, (size_t) yyleng);       \
     size += yyleng;                                     \
     assert (size < capacity);                           \
   } while (0)

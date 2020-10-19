@@ -1,4 +1,4 @@
-## Copyright (C) 2005, 2008-2015, 2018-2019 Free Software Foundation,
+## Copyright (C) 2005, 2008-2015, 2018-2020 Free Software Foundation,
 ## Inc.
 ##
 ## This program is free software: you can redistribute it and/or modify
@@ -34,6 +34,9 @@
 
 dist_noinst_SCRIPTS = %D%/extexi %D%/test
 TEST_LOG_COMPILER = $(SHELL) $(top_srcdir)/%D%/test
+
+TEST_CFLAGS =						\
+  $(WARN_CFLAGS) $(WARN_CFLAGS_TEST) $(WERROR_CFLAGS)
 
 AM_CXXFLAGS =							\
   $(WARN_CXXFLAGS) $(WARN_CXXFLAGS_TEST) $(WERROR_CXXFLAGS)

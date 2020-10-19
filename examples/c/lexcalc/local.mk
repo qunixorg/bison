@@ -1,4 +1,4 @@
-## Copyright (C) 2018-2019 Free Software Foundation, Inc.
+## Copyright (C) 2018-2020 Free Software Foundation, Inc.
 ##
 ## This program is free software: you can redistribute it and/or modify
 ## it under the terms of the GNU General Public License as published by
@@ -25,6 +25,8 @@ if FLEX_WORKS
   nodist_%C%_lexcalc_SOURCES = %D%/parse.y %D%/parse.h %D%/scan.l
   # Don't use gnulib's system headers.
   %C%_lexcalc_CPPFLAGS = -I$(top_srcdir)/%D% -I$(top_builddir)/%D%
+  # Fighting warnings triggered by Flex is just too painful.
+  # %C%_lexcalc_CFLAGS = $(TEST_CFLAGS)
 endif FLEX_WORKS
 
 %D%/parse.c: $(dependencies)
